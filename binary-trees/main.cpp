@@ -1,4 +1,9 @@
 #include <cstdio>
+// Extrclase BIS08
+// Estructura de Datos - Árboles Binarios
+// Universidad Latina de Costa Rica
+// Autor: Rodolfo Meneses Leal
+// Fecha: 10-07-2025
 
 struct TreeNode {
 
