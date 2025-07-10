@@ -13,15 +13,22 @@ struct DoublyNode {
     DoublyNode* prev;
 };
 
-int array[5] = {0, 0, 0, 0, 0};
-// Static List with a fixed size of 5
-// Simple Linked List and Doubly Linked List will be implemented later
+int         array[5]    = {0, 0, 0, 0, 0};
+Node*       head        = nullptr;
+DoublyNode* dHead       = nullptr;
 
 int operationsMenu(int type);
 void create(int type);
+void createFront(Node*& head, int element, int type);
+void createEnd(Node*& head, int element, int type);
+void createAt(Node*& head, int element, int index, int type);
 void read(int type);
 void update(int type);
 void delet(int type);
+
+void createFront(DoublyNode*& dHead, int element, int type);
+void createEnd(DoublyNode*& dHead, int element, int type);
+void createAt(DoublyNode*& dHead, int element, int index, int type);
 
 int main(){
 
@@ -71,15 +78,15 @@ void create(int type){
 
     int index, element;
 
-    printf("Indicate the position to add an element: ");
-    scanf("%d", &index);
-    printf("Enter the element to add: ");
-    scanf("%d", &element);
-
     switch(type) {
 
         // Static List
         case 1: {
+
+            printf("Indicate the position to add an element: ");
+            scanf("%d", &index);
+            printf("Enter the element to add: ");
+            scanf("%d", &element);
 
             // Validation: Index
             if(index < 0 || index >= 5) {
@@ -101,15 +108,76 @@ void create(int type){
 
         // Simple Linked List
         case 2: {
-            // Implementation for Simple Linked List creation will go here
-            // Implementation below
+            int choice;
+
+            printf("\n=Linked List Create Menu=\n");
+            printf("1. Add Element at Beginning\n");
+            printf("2. Add Element at End\n");
+            printf("3. Add Element at Position\n");
+            printf("Enter your choice: ");
+            scanf("%d", &choice);
+
+            switch(choice) {
+                case 1:
+                    printf("Adding Element at Beginning\n");
+                    printf("Enter the element to add: ");
+                    scanf("%d", &element);
+                    createFront(head, element, type);
+                    break;
+                case 2:
+                    printf("Adding Element at End\n");
+                    printf("Enter the element to add: ");
+                    scanf("%d", &element);
+                    createEnd(head, element, type);
+                    break;
+                case 3:
+                    printf("Indicate the position to add an element: ");
+                    scanf("%d", &index);
+                    printf("Enter the element to add: ");
+                    scanf("%d", &element);
+                    createAt(head, element, index, type);
+                    break;
+                default:
+                    printf("Invalid choice for Simple Linked List creation.\n");
+            }
         
             break;
         }
             
-        
-        case 3: 
+        case 3: {
+            int choice;
+            printf("\n=Linked List Create Menu=\n");
+            printf("1. Add Element at Beginning\n");
+            printf("2. Add Element at End\n");
+            printf("3. Add Element at Position\n");
+            printf("Enter your choice: ");
+            scanf("%d", &choice);
+            switch(choice) {
+                case 1:
+                    printf("Adding Element at Beginning\n");
+                    printf("Enter the element to add: ");
+                    scanf("%d", &element);
+                    createFront(dHead, element, type);
+                    break;
+                case 2:
+                    printf("Adding Element at End\n");
+                    printf("Enter the element to add: ");
+                    scanf("%d", &element);
+                    createEnd(dHead, element, type);
+                    break;
+                case 3:
+                    printf("Indicate the position to add an element: ");
+                    scanf("%d", &index);
+                    printf("Enter the element to add: ");
+                    scanf("%d", &element);
+                    createAt(dHead, element, index, type);
+                    break;
+                default:
+                    printf("Invalid choice for Doubly Linked List creation.\n");
+            }
             break;
+        }
+            
         
         default: 
             printf("Invalid type selected.\n");
@@ -122,6 +190,114 @@ void create(int type){
 
 }
 
+void createFront(Node*& head, int element, int type){
+    printf("type is %d\n", type);
+    // Simple Linked List
+    if(type == 2){
+        Node* newNode = new Node{element, head};
+        head = newNode;
+    }
+    
+    // Doubly Linked List
+    if(type == 3){
+        DoublyNode* newNode = new DoublyNode{element, dHead, nullptr};
+        if (dHead) dHead->prev = newNode;
+        dHead = newNode;
+    }
+}
+
+
+void createEnd(Node*& head, int element, int type){
+
+    // Simple Linked List
+    if(type == 2){
+        if (head == nullptr) {
+            head = new Node{element, nullptr};
+        } else {
+            // We create a new node because we dont want to modify 
+            // the original head instead we want to traverse the list
+            Node* current = head;
+
+            while (current->next != nullptr) {
+                // Here we are actually modiying the current node
+                // assigning the next pointer to the next node
+                // so we can traverse the list
+                current = current->next;
+            }
+            // Now we are at the end of the we can add the new node
+            // We create a new node and assign the element and next pointer
+            // to nullptr because it will be the last node
+            current->next = new Node{element, nullptr};
+        }
+    }
+
+    // Doubly Linked List
+    if(type == 3){
+        DoublyNode* newNode = new DoublyNode{element, nullptr, nullptr};
+        if (!dHead) {
+            dHead = newNode;
+            return;
+        }
+        DoublyNode* current = dHead;
+        while (current->next) current = current->next;
+        current->next = newNode;
+        newNode->prev = current;
+    }
+}
+
+void createAt(Node*& head, int element, int index, int type){
+
+    // Simple Linked List
+    if(type == 2){
+
+        // Validation: Index | we create node at the front
+        if(index == 0) {
+            createFront(head, element, type);
+            return;
+        }
+
+        Node* current = head;
+
+        // We traverse from start to the index - 1
+        // because we want to insert the new node after the current node
+        for(int i = 0; i < index - 1 && current != nullptr; i++) {
+            current = current->next;
+        }
+
+        // Validation: Index
+        if(current == nullptr) {
+            printf("Index out of bounds. Cannot add element at index %d.\n", index);
+            return;
+        }
+        
+        current->next = new Node{element, current->next};
+        return;
+    }
+
+    // Doubly Linked List
+    if(type == 3){
+
+        if (index == 0) {
+            createFront(dHead, element, type);
+            return;
+        }
+        DoublyNode* current = dHead;
+        for (int i = 0; i < index - 1 && current; i++) {
+            current = current->next;
+        }
+        if (!current) {
+            printf("Index out of bounds. Cannot add element at index %d.\n", index);
+            return;
+        }
+        DoublyNode* newNode = new DoublyNode{element, current->next, current};
+        if (current->next) current->next->prev = newNode;
+        current->next = newNode;
+    }
+}
+
+
+
+
 void read(int type) {
 
     switch(type){
@@ -132,12 +308,27 @@ void read(int type) {
             }
             break;
         }
-        case 2: 
-            // Read from Simple Linked List
+        case 2: {
+            printf("\n== Read: Simple Linked List Elements ==\n");
+            int count = 0;
+            Node* current = head;
+            while(current != nullptr) {
+                count++;
+                printf("Element %d: %d\n", count, current->data);
+                current = current->next; // Move to the next node
+            }
             break;
-        case 3: 
-            // Read from Doubly Linked List
+        }
+        case 3: {
+            printf("\n== Read: Doubly Linked List Elements ==\n");
+            
+            DoublyNode* current = dHead;
+            while(current != nullptr) {
+                printf("Element: %d\n", current->data);
+                current = current->next; // Move to the next node
+            }
             break;
+        }
     }
 
     return;
@@ -169,21 +360,39 @@ void update(int type) {
             printf("Element at index %d updated to %d.\n", index, element);
             break;
         }
-        case 2: 
+        case 2: {
             // Update in Simple Linked List
+            Node* current = head;
+            for (int i = 0; i < index && current != nullptr; i++) {
+                current = current->next;
+            }
+            if (current == nullptr) {
+                printf("Index out of bounds. Cannot update at index %d.\n", index);
+                break;
+            }
+            current->data = element;
+            printf("Element at index %d updated to %d.\n", index, element);
             break;
-        
-        case 3: 
+        }
+        case 3: {
             // Update in Doubly Linked List
+            DoublyNode* current = dHead;
+            for (int i = 0; i < index && current != nullptr; i++) {
+                current = current->next;
+            }
+            if (current == nullptr) {
+                printf("Index out of bounds. Cannot update at index %d.\n", index);
+                break;
+            }
+            current->data = element;
+            printf("Element at index %d updated to %d.\n", index, element);
             break;
-        
+        }
         default: 
             printf("Invalid type selected.\n");
             break;
-        
     }
     return;
-
 }
 
 void delet(int type) {
@@ -213,9 +422,32 @@ void delet(int type) {
             }
             break;
         }
-        case 2: 
+        case 2: {
             // Delete from Simple Linked List
-            break;
+            if (head == nullptr) {
+                printf("List is empty. Nothing to delete.\n");
+                break;
+            }
+            if (index == 0) {
+                Node* temp = head;
+                head = head->next;
+                printf("Element %d at index 0 deleted.\n", temp->data);
+                delete temp;
+                break;
+            }
+            Node* current = head;
+            for (int i = 0; i < index - 1 && current != nullptr; i++) {
+                current = current->next;
+            }
+            if (current == nullptr || current->next == nullptr) {
+                printf("Index out of bounds. Cannot delete at index %d.\n", index);
+                break;
+            }
+            Node* temp = current->next;
+            printf("Element %d at index %d deleted.\n", temp->data, index);
+            current->next = temp->next;
+            delete temp;
+            break;}
         case 3: 
             // Delete from Doubly Linked List
             break;
@@ -264,4 +496,4 @@ int operationsMenu(int type) {
     scanf("%d", &choice);
 
     return choice;
-}   
+}
