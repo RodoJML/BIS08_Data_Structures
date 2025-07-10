@@ -1,1 +1,4 @@
 .vscode/
+.plist/
+.yml/
+.DS_Store
