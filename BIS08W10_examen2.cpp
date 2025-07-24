@@ -116,16 +116,16 @@ int main(){
                 printf("Ingrese un valor a insertar: ");
                 scanf("%d", &value);
                 root = insert(root, value);
-                printf("✅ Valor %d insertado en el árbol.\n", value);
+                printf("Valor %d insertado en el árbol.\n", value);
                 break;
             case 2:
                 if(root == nullptr){
-                    printf("❌ El árbol está vacío. Inserte algunos valores primero.\n");
+                    printf("El árbol está vacío. Inserte algunos valores primero.\n");
                     break;
                 }
                 
                 printf("=== Análisis del Árbol ===\n");
-                printf("🌳 Información del árbol:\n");
+                printf("Información del árbol:\n");
                 printf("   Raíz del árbol: %d\n", root->value);
                 printf("   Altura del árbol: %d\n", calculateHeight(root));
                 printf("   Número de hojas: %d\n", countLeaves(root));
@@ -135,7 +135,7 @@ int main(){
                 break;
             case 3:
                 if(root == nullptr){
-                    printf("❌ El árbol está vacío. Inserte algunos valores primero.\n");
+                    printf("El árbol está vacío. Inserte algunos valores primero.\n");
                     break;
                 }
                 
@@ -149,24 +149,24 @@ int main(){
                 
                 switch(traversalChoice){
                     case 1:
-                        printf("🔄 Recorrido en preorden: ");
+                        printf("Recorrido en preorden: ");
                         preorder(root);
                         printf("\n");
-                        printf("💡 Orden: Raíz → Izquierda → Derecha\n");
+                        printf("Orden: Raíz → Izquierda → Derecha\n");
                         break;
                     case 2:
-                        printf("🔄 Recorrido en postorden: ");
+                        printf("Recorrido en postorden: ");
                         postorder(root);
                         printf("\n");
-                        printf("💡 Orden: Izquierda → Derecha → Raíz\n");
+                        printf("Orden: Izquierda → Derecha → Raíz\n");
                         break;
                     default:
-                        printf("❌ Opción no válida.\n");
+                        printf("Opción no válida.\n");
                 }
                 break;
             case 4:
                 exit = true;
-                printf("¡Hasta luego! 👋\n");
+                printf("Fin del examen\n");
                 break;
             default:
                 printf("Opción no válida. Intente de nuevo.\n");
